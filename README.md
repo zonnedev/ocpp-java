@@ -12,6 +12,8 @@ Immutable OCPP 1.6 JSON and OCPP 2.0.1 models and a strict Jackson codec for Jav
 - [Errors and validation](docs/errors-and-validation.md)
 - [Architecture](docs/architecture.md)
 - [Design decisions](docs/design-decisions.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
 
 Start with the [getting-started guide](docs/getting-started.md) to encode and decode your first OCPP message. The documentation uses the official terms `CALL`, `CALLRESULT`, and `CALLERROR` alongside the corresponding Java types.
 
