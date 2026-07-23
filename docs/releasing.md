@@ -70,3 +70,16 @@ Release containing the binary, source, and Javadoc JARs. Configure required revi
 the `maven-central` environment if publication should require manual approval.
 
 Maven Central releases are immutable. Fixes must be published under a new version.
+
+## Update the API baseline
+
+After Maven Central contains the new immutable release, update `apiBaselineVersion` in
+`gradle.properties` to that version. Run:
+
+```shell
+./gradlew apiCompatibilityCheck
+```
+
+Commit the baseline update as a dedicated reviewed change. Keeping the version explicit
+instead of using `latest.release` ensures that the same commit always compares against the
+same public API.

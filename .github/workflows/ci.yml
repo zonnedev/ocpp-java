@@ -57,5 +57,7 @@ jobs:
           path: |
             ocpp-java/build/reports/tests/
             ocpp-java/build/reports/checkstyle/
+            ocpp-java/build/reports/api-compatibility.html
+            ocpp-java/build/reports/api-compatibility.txt
           if-no-files-found: ignore
           retention-days: 7

@@ -49,3 +49,11 @@ Run:
 ./gradlew spotlessApply check
 git diff --check
 ```
+
+## API compatibility
+
+The `apiCompatibilityCheck` task compares the current JAR with the released version declared by `apiBaselineVersion` in `gradle.properties`. It checks exported `io.github.zonnedev.ocpp` packages, excludes the non-exported `codec.internal` implementation package, and fails `check` when it finds a binary-incompatible public API change.
+
+The task writes text and HTML reports under `ocpp-java/build/reports/`. After publishing a release, update `apiBaselineVersion` to that immutable Maven Central version in a dedicated reviewed change. Never use a dynamic version such as `latest.release`, because the same commit must resolve the same compatibility baseline over time.
+
+During `0.x`, an intentional breaking change still requires an explicit baseline or compatibility-policy decision. Do not bypass the task silently. For `1.x`, preserve binary compatibility throughout the major release line unless the project deliberately prepares a new major version.

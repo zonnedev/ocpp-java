@@ -1,6 +1,7 @@
 plugins {
     `java-library`
     id("com.vanniktech.maven.publish") version "0.37.0"
+    id("me.champeau.gradle.japicmp") version "0.4.6"
 }
 
 java {
@@ -23,6 +24,51 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.27.3")
 }
 
+val apiBaseline by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+    isTransitive = true
+}
+
+dependencies {
+    apiBaseline(
+        "io.github.zonnedev:ocpp-java:${providers.gradleProperty("apiBaselineVersion").get()}",
+    )
+}
+
+val apiBaselineArchives = apiBaseline.incoming.artifactView {
+    componentFilter { identifier ->
+        identifier is org.gradle.api.artifacts.component.ModuleComponentIdentifier &&
+            identifier.group == "io.github.zonnedev" &&
+            identifier.module == "ocpp-java"
+    }
+}.files
+
+val apiCompatibilityCheck by tasks.registering(
+    me.champeau.gradle.japicmp.JapicmpTask::class,
+) {
+    group = "verification"
+    description = "Checks binary compatibility against the last released API."
+    dependsOn(tasks.jar)
+
+    oldClasspath.from(apiBaseline)
+    newClasspath.from(configurations.runtimeClasspath)
+    oldArchives.from(apiBaselineArchives)
+    newArchives.from(tasks.jar)
+
+    packageIncludes = listOf("io.github.zonnedev.ocpp.*")
+    packageExcludes = listOf("io.github.zonnedev.ocpp.codec.internal.*")
+    onlyModified = true
+    onlyBinaryIncompatibleModified = true
+    failOnModification = true
+    ignoreMissingClasses = false
+    txtOutputFile = layout.buildDirectory.file("reports/api-compatibility.txt")
+    htmlOutputFile = layout.buildDirectory.file("reports/api-compatibility.html")
+}
+
+tasks.check {
+    dependsOn(apiCompatibilityCheck)
+}
 
 tasks.compileJava {
     options.compilerArgs.addAll(listOf("-Xlint:all", "-Werror", "-parameters"))
