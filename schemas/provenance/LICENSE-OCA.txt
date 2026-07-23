@@ -1,0 +1,7 @@
+OCPP schema source documents: Copyright Open Charge Alliance.
+
+Creative Commons Attribution-NoDerivatives 4.0 International:
+https://creativecommons.org/licenses/by-nd/4.0/legalcode
+
+This notice describes the schema inputs only. See the project license for original library and generator code.
+

@@ -1,0 +1,4 @@
+interface:
+  display_name: "OCPP Java Project"
+  short_description: "Maintain OCPP models, codec, and extensions"
+  default_prompt: "Use $ocpp-java-project to implement and verify a change to this OCPP Java project."

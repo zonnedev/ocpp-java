@@ -1,0 +1,62 @@
+.local/
+
+# Gradle
+.gradle/
+**/build/
+
+# Java build output
+**/bin/
+**/out/
+*.class
+*.jar
+*.war
+*.ear
+
+# Keep the Gradle wrapper binary under version control
+!gradle/wrapper/gradle-wrapper.jar
+
+# JVM crash and diagnostic files
+hs_err_pid*
+replay_pid*
+*.hprof
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+.factorypath
+
+# Visual Studio Code
+.vscode/
+
+# Local Codex workspace state
+.agents/*
+!.agents/skills/
+!.agents/skills/**
+.codex/
+
+# Local environment configuration
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Operating-system metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini

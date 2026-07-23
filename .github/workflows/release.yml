@@ -1,0 +1,106 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish ${{ github.ref_name }} to Maven Central
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: maven-central
+
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v6
+
+      - name: Validate release tag
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          if [[ ! "${tag}" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Release tags must use semantic versioning, for example v0.1.0"
+            exit 1
+          fi
+          version="${tag#v}"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+
+      - name: Build and test release
+        run: >-
+          ./gradlew --no-daemon --stacktrace
+          -PreleaseVersion=${{ steps.version.outputs.version }}
+          clean check assemble
+
+      - name: Publish to Maven Central
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+        run: >-
+          ./gradlew --no-daemon --stacktrace
+          -PreleaseVersion=${{ steps.version.outputs.version }}
+          publishAndReleaseToMavenCentral
+
+      - name: Stage GitHub release artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-${{ steps.version.outputs.version }}
+          path: |
+            ocpp-java/build/libs/ocpp-java-${{ steps.version.outputs.version }}.jar
+            ocpp-java/build/libs/ocpp-java-${{ steps.version.outputs.version }}-sources.jar
+            ocpp-java/build/libs/ocpp-java-${{ steps.version.outputs.version }}-javadoc.jar
+          if-no-files-found: error
+          retention-days: 7
+
+  github-release:
+    name: Create GitHub release
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    steps:
+      - name: Derive release version
+        id: version
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "${GITHUB_OUTPUT}"
+
+      - name: Download release artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: release-${{ steps.version.outputs.version }}
+          path: release-artifacts
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: release-artifacts/*.jar

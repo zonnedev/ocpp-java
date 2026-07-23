@@ -1,0 +1,46 @@
+package io.github.zonnedev.ocpp.v16;
+
+import io.github.zonnedev.ocpp.api.OcppRequest;
+
+/** Exhaustive v16 request payload family. */
+public sealed interface Ocpp16Request extends OcppRequest
+  permits io.github.zonnedev.ocpp.v16.model.AuthorizeRequest,
+  io.github.zonnedev.ocpp.v16.model.BootNotificationRequest,
+  io.github.zonnedev.ocpp.v16.model.CancelReservationRequest,
+  io.github.zonnedev.ocpp.v16.model.CertificateSignedRequest,
+  io.github.zonnedev.ocpp.v16.model.ChangeAvailabilityRequest,
+  io.github.zonnedev.ocpp.v16.model.ChangeConfigurationRequest,
+  io.github.zonnedev.ocpp.v16.model.ClearCacheRequest,
+  io.github.zonnedev.ocpp.v16.model.ClearChargingProfileRequest,
+  io.github.zonnedev.ocpp.v16.model.DataTransferRequest,
+  io.github.zonnedev.ocpp.v16.model.DeleteCertificateRequest,
+  io.github.zonnedev.ocpp.v16.model.DiagnosticsStatusNotificationRequest,
+  io.github.zonnedev.ocpp.v16.model.ExtendedTriggerMessageRequest,
+  io.github.zonnedev.ocpp.v16.model.FirmwareStatusNotificationRequest,
+  io.github.zonnedev.ocpp.v16.model.GetCompositeScheduleRequest,
+  io.github.zonnedev.ocpp.v16.model.GetConfigurationRequest,
+  io.github.zonnedev.ocpp.v16.model.GetDiagnosticsRequest,
+  io.github.zonnedev.ocpp.v16.model.GetInstalledCertificateIdsRequest,
+  io.github.zonnedev.ocpp.v16.model.GetLocalListVersionRequest,
+  io.github.zonnedev.ocpp.v16.model.GetLogRequest,
+  io.github.zonnedev.ocpp.v16.model.HeartbeatRequest,
+  io.github.zonnedev.ocpp.v16.model.InstallCertificateRequest,
+  io.github.zonnedev.ocpp.v16.model.LogStatusNotificationRequest,
+  io.github.zonnedev.ocpp.v16.model.MeterValuesRequest,
+  io.github.zonnedev.ocpp.v16.model.RemoteStartTransactionRequest,
+  io.github.zonnedev.ocpp.v16.model.RemoteStopTransactionRequest,
+  io.github.zonnedev.ocpp.v16.model.ReserveNowRequest,
+  io.github.zonnedev.ocpp.v16.model.ResetRequest,
+  io.github.zonnedev.ocpp.v16.model.SecurityEventNotificationRequest,
+  io.github.zonnedev.ocpp.v16.model.SendLocalListRequest,
+  io.github.zonnedev.ocpp.v16.model.SetChargingProfileRequest,
+  io.github.zonnedev.ocpp.v16.model.SignCertificateRequest,
+  io.github.zonnedev.ocpp.v16.model.SignedFirmwareStatusNotificationRequest,
+  io.github.zonnedev.ocpp.v16.model.SignedUpdateFirmwareRequest,
+  io.github.zonnedev.ocpp.v16.model.StartTransactionRequest,
+  io.github.zonnedev.ocpp.v16.model.StatusNotificationRequest,
+  io.github.zonnedev.ocpp.v16.model.StopTransactionRequest,
+  io.github.zonnedev.ocpp.v16.model.TriggerMessageRequest,
+  io.github.zonnedev.ocpp.v16.model.UnlockConnectorRequest,
+  io.github.zonnedev.ocpp.v16.model.UpdateFirmwareRequest {
+}

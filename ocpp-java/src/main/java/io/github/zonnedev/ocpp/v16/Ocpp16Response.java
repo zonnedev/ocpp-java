@@ -1,0 +1,46 @@
+package io.github.zonnedev.ocpp.v16;
+
+import io.github.zonnedev.ocpp.api.OcppResponse;
+
+/** Exhaustive v16 response payload family. */
+public sealed interface Ocpp16Response extends OcppResponse
+  permits io.github.zonnedev.ocpp.v16.model.AuthorizeResponse,
+  io.github.zonnedev.ocpp.v16.model.BootNotificationResponse,
+  io.github.zonnedev.ocpp.v16.model.CancelReservationResponse,
+  io.github.zonnedev.ocpp.v16.model.CertificateSignedResponse,
+  io.github.zonnedev.ocpp.v16.model.ChangeAvailabilityResponse,
+  io.github.zonnedev.ocpp.v16.model.ChangeConfigurationResponse,
+  io.github.zonnedev.ocpp.v16.model.ClearCacheResponse,
+  io.github.zonnedev.ocpp.v16.model.ClearChargingProfileResponse,
+  io.github.zonnedev.ocpp.v16.model.DataTransferResponse,
+  io.github.zonnedev.ocpp.v16.model.DeleteCertificateResponse,
+  io.github.zonnedev.ocpp.v16.model.DiagnosticsStatusNotificationResponse,
+  io.github.zonnedev.ocpp.v16.model.ExtendedTriggerMessageResponse,
+  io.github.zonnedev.ocpp.v16.model.FirmwareStatusNotificationResponse,
+  io.github.zonnedev.ocpp.v16.model.GetCompositeScheduleResponse,
+  io.github.zonnedev.ocpp.v16.model.GetConfigurationResponse,
+  io.github.zonnedev.ocpp.v16.model.GetDiagnosticsResponse,
+  io.github.zonnedev.ocpp.v16.model.GetInstalledCertificateIdsResponse,
+  io.github.zonnedev.ocpp.v16.model.GetLocalListVersionResponse,
+  io.github.zonnedev.ocpp.v16.model.GetLogResponse,
+  io.github.zonnedev.ocpp.v16.model.HeartbeatResponse,
+  io.github.zonnedev.ocpp.v16.model.InstallCertificateResponse,
+  io.github.zonnedev.ocpp.v16.model.LogStatusNotificationResponse,
+  io.github.zonnedev.ocpp.v16.model.MeterValuesResponse,
+  io.github.zonnedev.ocpp.v16.model.RemoteStartTransactionResponse,
+  io.github.zonnedev.ocpp.v16.model.RemoteStopTransactionResponse,
+  io.github.zonnedev.ocpp.v16.model.ReserveNowResponse,
+  io.github.zonnedev.ocpp.v16.model.ResetResponse,
+  io.github.zonnedev.ocpp.v16.model.SecurityEventNotificationResponse,
+  io.github.zonnedev.ocpp.v16.model.SendLocalListResponse,
+  io.github.zonnedev.ocpp.v16.model.SetChargingProfileResponse,
+  io.github.zonnedev.ocpp.v16.model.SignCertificateResponse,
+  io.github.zonnedev.ocpp.v16.model.SignedFirmwareStatusNotificationResponse,
+  io.github.zonnedev.ocpp.v16.model.SignedUpdateFirmwareResponse,
+  io.github.zonnedev.ocpp.v16.model.StartTransactionResponse,
+  io.github.zonnedev.ocpp.v16.model.StatusNotificationResponse,
+  io.github.zonnedev.ocpp.v16.model.StopTransactionResponse,
+  io.github.zonnedev.ocpp.v16.model.TriggerMessageResponse,
+  io.github.zonnedev.ocpp.v16.model.UnlockConnectorResponse,
+  io.github.zonnedev.ocpp.v16.model.UpdateFirmwareResponse {
+}
