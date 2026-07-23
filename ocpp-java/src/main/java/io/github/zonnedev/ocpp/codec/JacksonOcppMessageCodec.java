@@ -16,6 +16,7 @@ import io.github.zonnedev.ocpp.api.datatransfer.DataTransferPayload;
 import io.github.zonnedev.ocpp.api.datatransfer.DataTransferRequestPayload;
 import io.github.zonnedev.ocpp.api.datatransfer.DataTransferResponsePayload;
 import io.github.zonnedev.ocpp.codec.internal.DataTransferRegistry;
+import io.github.zonnedev.ocpp.codec.internal.OfficialSchemaValidator;
 import io.github.zonnedev.ocpp.jackson.OcppObjectMapperFactory;
 import io.github.zonnedev.ocpp.v16.Ocpp16Action;
 import io.github.zonnedev.ocpp.v16.Ocpp16Actions;
@@ -35,6 +36,7 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
   private final ObjectMapper mapper;
   private final OcppRequestRepository repository;
   private final DataTransferRegistry dataTransfers;
+  private final @Nullable OfficialSchemaValidator schemaValidator;
 
   /** The supplied mapper is defensively copied and is never mutated. */
   public JacksonOcppMessageCodec(
@@ -45,14 +47,16 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
       mapper,
       repository,
       new DataTransferRegistry()
-        .freeze()
+        .freeze(),
+      true
     );
   }
 
   private JacksonOcppMessageCodec(
     ObjectMapper mapper,
     OcppRequestRepository repository,
-    DataTransferRegistry dataTransfers
+    DataTransferRegistry dataTransfers,
+    boolean strictSchemaValidation
   ) {
     this.mapper = Objects.requireNonNull(
       mapper,
@@ -67,6 +71,7 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
       dataTransfers,
       "dataTransfers"
     );
+    this.schemaValidator = strictSchemaValidation ? new OfficialSchemaValidator() : null;
   }
 
   public static JacksonOcppMessageCodec createDefault() {
@@ -445,6 +450,12 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
     OcppActionDefinition<Q, S> definition,
     JsonNode payload
   ) {
+    validateSchema(
+      definition.action()
+        .version(),
+      definition.requestType(),
+      payload
+    );
     return OcppRequestMessage.of(
       id,
       definition,
@@ -584,6 +595,12 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
         frame,
         2,
         "response payload"
+      );
+      validateSchema(
+        definition.action()
+          .version(),
+        definition.responseType(),
+        payload
       );
       return OcppResponseMessage.of(
         id,
@@ -821,6 +838,12 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
     OcppActionDefinition<Q, S> definition,
     JsonNode json
   ) {
+    validateSchema(
+      definition.action()
+        .version(),
+      definition.requestType(),
+      json
+    );
     return tree(
       requirePayloadObject(json),
       definition.requestType()
@@ -841,6 +864,12 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
     OcppActionDefinition<Q, S> definition,
     JsonNode json
   ) {
+    validateSchema(
+      definition.action()
+        .version(),
+      definition.responseType(),
+      json
+    );
     return tree(
       requirePayloadObject(json),
       definition.responseType()
@@ -860,6 +889,20 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
       throw new OcppDecodingException(
         "Payload does not conform to " + type.getName(),
         e
+      );
+    }
+  }
+
+  private void validateSchema(
+    OcppVersion version,
+    Class<?> payloadType,
+    JsonNode payload
+  ) {
+    if (schemaValidator != null) {
+      schemaValidator.validate(
+        version,
+        payloadType,
+        payload
       );
     }
   }
@@ -1036,6 +1079,7 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
     private ObjectMapper mapper = OcppObjectMapperFactory.create();
     private OcppRequestRepository repository = InMemoryOcppRequestRepository.create();
     private final DataTransferRegistry dataTransfers = new DataTransferRegistry();
+    private boolean strictSchemaValidation = true;
 
     private Builder() {
     }
@@ -1056,6 +1100,15 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
       return this;
     }
 
+    /**
+     * Enables or disables validation against the bundled official schemas. Strict
+     * schema validation is enabled by default.
+     */
+    public Builder strictSchemaValidation(boolean enabled) {
+      strictSchemaValidation = enabled;
+      return this;
+    }
+
     public Builder dataTransferModules(
       Consumer<DataTransferModuleRegistrar> configuration
     ) {
@@ -1071,7 +1124,8 @@ public final class JacksonOcppMessageCodec implements OcppMessageCodec {
       return new JacksonOcppMessageCodec(
         mapper,
         repository,
-        dataTransfers.freeze()
+        dataTransfers.freeze(),
+        strictSchemaValidation
       );
     }
   }

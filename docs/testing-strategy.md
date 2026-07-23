@@ -31,6 +31,10 @@ Request tests assert `[2, id, action, payload]`. Response tests assert `[3, id, 
 
 Cover non-array roots, malformed JSON, unsupported or non-integer message types, wrong element counts, invalid message IDs, unknown actions, non-object payloads, missing correlation, required nulls, scalar coercion, forbidden properties, and unknown enum or error-code values.
 
+`OfficialSchemaConformanceTest` derives negative cases from every reachable constraint in each minimal official fixture. It verifies missing and null required properties, unknown fields and enums, wrong JSON types, disabled scalar coercion, string bounds, numeric bounds, and array bounds through both String and JSON-tree payload entry points.
+
+Focused codec tests verify that strict schema validation is enabled by default and that explicitly disabling it skips only official schema enforcement while preserving Jackson's unknown-property rejection.
+
 ## Correlation and DataTransfer
 
 Test repository save/remove behavior, duplicate outstanding IDs, absent source contexts, error cleanup, and custom repository integration.

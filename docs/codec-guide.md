@@ -25,6 +25,17 @@ OcppMessageCodec codec = JacksonOcppMessageCodec
 
 The codec defensively copies a supplied `ObjectMapper`; it does not mutate the caller's mapper. The caller is responsible for ensuring that a custom mapper remains compatible with strict OCPP decoding.
 
+Strict validation against the bundled official schemas is enabled by default. Applications that have measured its cost and accept reduced protocol guarantees can disable only that layer:
+
+```java
+OcppMessageCodec codec = JacksonOcppMessageCodec
+  .builder()
+  .strictSchemaValidation(false)
+  .build();
+```
+
+This is an advanced performance option. It does not disable frame checks, strict Jackson binding, unknown-property or enum rejection, record-constructor checks, or DataTransfer validation. It can, however, allow schema-invalid payloads that Java binding cannot distinguish. For example, a missing required primitive property may become `0` or `false`. Benchmark before disabling it.
+
 ## Encoding complete frames
 
 `encode(OcppFrame)` returns JSON text. `encodeTree(OcppFrame)` returns a Jackson `JsonNode`.

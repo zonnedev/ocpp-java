@@ -7,6 +7,10 @@ java {
     toolchain { languageVersion = JavaLanguageVersion.of(25) }
 }
 
+sourceSets.main {
+    resources.srcDir(rootProject.layout.projectDirectory.dir("schemas"))
+}
+
 dependencies {
     api("org.jspecify:jspecify:1.0.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.19.2")

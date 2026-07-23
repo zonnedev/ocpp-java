@@ -2,6 +2,7 @@ module io.github.zonnedev.ocpp {
   requires transitive org.jspecify;
   requires transitive com.fasterxml.jackson.databind;
   requires com.fasterxml.jackson.datatype.jsr310;
+  requires com.networknt.schema;
 
   exports io.github.zonnedev.ocpp.api;
   exports io.github.zonnedev.ocpp.api.datatransfer;

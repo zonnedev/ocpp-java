@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.zonnedev.ocpp.api.OcppVersion;
 import io.github.zonnedev.ocpp.v16.Ocpp16Actions;
+import io.github.zonnedev.ocpp.v16.model.CancelReservationRequest;
 import io.github.zonnedev.ocpp.v16.model.HeartbeatRequest;
 import io.github.zonnedev.ocpp.v16.model.HeartbeatResponse;
 import java.time.Instant;
@@ -107,6 +108,27 @@ class JacksonOcppMessageCodecTest {
       .isInstanceOf(
         OcppDecodingException.class
       );
+  }
+
+  @Test
+  @DisplayName("Official schema validation can be disabled without weakening Jackson checks")
+  void it_allows_strict_schema_validation_to_be_disabled_explicitly() {
+    OcppMessageCodec relaxedCodec = JacksonOcppMessageCodec.builder()
+      .strictSchemaValidation(false)
+      .build();
+
+    assertThat(
+      relaxedCodec.decodeRequestPayload(
+        Ocpp16Actions.CANCEL_RESERVATION,
+        "{}"
+      )
+    ).isEqualTo(CancelReservationRequest.of(0));
+    assertThatThrownBy(
+      () -> relaxedCodec.decodeRequestPayload(
+        Ocpp16Actions.CANCEL_RESERVATION,
+        "{\"reservationId\":1,\"unexpected\":true}"
+      )
+    ).isInstanceOf(OcppDecodingException.class);
   }
 
   private static final class JsonNodeFactoryHolder {

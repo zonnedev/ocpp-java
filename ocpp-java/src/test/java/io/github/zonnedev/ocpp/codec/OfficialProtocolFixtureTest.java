@@ -26,7 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 class OfficialProtocolFixtureTest {
   private static final JsonNodeFactory JSON = JsonNodeFactory.instance;
   private static final ObjectMapper MAPPER = new ObjectMapper();
-  private static final Path SCHEMA_DIRECTORY = Path.of(
+  static final Path SCHEMA_DIRECTORY = Path.of(
     System.getProperty("ocpp.schema.directory")
   );
 
@@ -144,7 +144,7 @@ class OfficialProtocolFixtureTest {
     );
   }
 
-  private static JsonNode fixtureFor(
+  static JsonNode fixtureFor(
     String version,
     Class<?> payloadType
   ) throws IOException {
@@ -164,7 +164,7 @@ class OfficialProtocolFixtureTest {
     );
   }
 
-  private static String schemaFileName(
+  static String schemaFileName(
     String version,
     Class<?> payloadType
   ) {
@@ -178,7 +178,7 @@ class OfficialProtocolFixtureTest {
     return name + ".json";
   }
 
-  private static JsonNode minimalValue(
+  static JsonNode minimalValue(
     JsonNode schema,
     JsonNode root
   ) {
@@ -274,7 +274,7 @@ class OfficialProtocolFixtureTest {
     return JSON.textNode("x".repeat(length));
   }
 
-  private static JsonNode resolveReference(
+  static JsonNode resolveReference(
     String reference,
     JsonNode root
   ) {

@@ -70,9 +70,21 @@ Decoding a `CALLERROR` removes any stored request context with the same message 
 
 ## Validation layers
 
-Model constructors enforce inexpensive local schema constraints such as required values, length limits, ranges, and immutable collection ownership. The codec additionally validates frame structure and delegates strict payload binding to its configured mapper.
+Model constructors enforce inexpensive local schema constraints such as required values, length limits, ranges, and immutable collection ownership. Before strict Jackson binding, the codec validates every ordinary protocol payload against the corresponding official schema bundled in the library. This preserves required-property and numeric constraints that Java primitive components alone cannot distinguish during deserialization.
 
-The schema source remains checked in as protocol provenance and a maintenance reference. Invalid inputs are never silently normalized, coerced, or assigned fallback enum values.
+The schema source remains checked in as protocol provenance, a maintenance reference, and the runtime validation source. With the default strict configuration, invalid inputs are never silently normalized, coerced, or assigned fallback enum values.
+
+## Optional strict schema validation
+
+Official schema validation is enabled by default for `createDefault()` and `builder().build()`. Performance-sensitive applications can explicitly disable this layer:
+
+```java
+OcppMessageCodec codec = JacksonOcppMessageCodec.builder()
+  .strictSchemaValidation(false)
+  .build();
+```
+
+Disabling it leaves frame validation, Jackson type and unknown-property handling, enum decoding, model constructors, and DataTransfer checks active. It reduces protocol guarantees because Jackson can map missing or null primitive properties to Java defaults. Treat this as an advanced optimization and measure the validation cost before using it.
 
 ## Handling untrusted input
 
