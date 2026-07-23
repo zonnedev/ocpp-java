@@ -77,3 +77,6 @@ OCPP 1.6 encodes extension data as JSON inside a textual `data` property; OCPP 2
 ## Dependency boundaries
 
 Jackson is the serialization implementation and `JsonNode` is the dynamic JSON boundary. JSpecify defines public nullness. Java time types represent protocol timestamps. The project must not add networking or framework integration dependencies.
+
+The supported export and compatibility boundaries are defined in the
+[public API policy](public-api.md).

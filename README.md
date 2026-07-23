@@ -11,6 +11,7 @@ Immutable OCPP 1.6 JSON and OCPP 2.0.1 models and a strict Jackson codec for Jav
 - [Model guide](docs/model-guide.md)
 - [Errors and validation](docs/errors-and-validation.md)
 - [Architecture](docs/architecture.md)
+- [Public API policy](docs/public-api.md)
 - [Design decisions](docs/design-decisions.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
