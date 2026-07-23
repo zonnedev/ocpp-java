@@ -25,6 +25,8 @@ For every action, cover a valid request and response fixture. Verify message ID,
 
 Request tests assert `[2, id, action, payload]`. Response tests assert `[3, id, payload]` and specifically verify the absence of an action element. Error tests cover every standard code, empty and populated details, and strict malformed-frame handling.
 
+`OfficialProtocolFixtureTest` builds the smallest valid payload from each checked-in schema and exercises both the String and JSON-tree codec entry points. Its parameterized inventory covers every ordinary request and response action in OCPP 1.6 and OCPP 2.0.1. DataTransfer is covered separately because its payload type is selected by an explicitly registered vendor module rather than the base protocol action alone.
+
 ## Invalid frames
 
 Cover non-array roots, malformed JSON, unsupported or non-integer message types, wrong element counts, invalid message IDs, unknown actions, non-object payloads, missing correlation, required nulls, scalar coercion, forbidden properties, and unknown enum or error-code values.

@@ -24,7 +24,14 @@ tasks.compileJava {
     options.compilerArgs.addAll(listOf("-Xlint:all", "-Werror", "-parameters"))
 }
 
-tasks.test { useJUnitPlatform() }
+tasks.test {
+    useJUnitPlatform()
+    inputs.dir(rootProject.layout.projectDirectory.dir("schemas"))
+    systemProperty(
+        "ocpp.schema.directory",
+        rootProject.layout.projectDirectory.dir("schemas").asFile.absolutePath,
+    )
+}
 
 mavenPublishing {
     publishToMavenCentral()
