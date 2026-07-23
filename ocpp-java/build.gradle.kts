@@ -5,8 +5,6 @@ plugins {
 
 java {
     toolchain { languageVersion = JavaLanguageVersion.of(25) }
-    withJavadocJar()
-    withSourcesJar()
 }
 
 dependencies {
