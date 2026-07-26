@@ -32,6 +32,10 @@ Unknown vendors, unknown message IDs, and missing message IDs throw `UnknownData
 
 The bundled OCPP 1.6 ISO 15118 extension is opt-in and lives under `io.github.zonnedev.ocpp.extension.v16.iso15118`.
 
+The has-to-be v1.3 document misspells the `ExtendedTriggerMessage`
+`SignV2GCertificate` value as `SignV2GCertifcate`. The bundled module
+intentionally uses only the corrected spelling and rejects the published typo.
+
 ## Message ownership shapes model packages
 
 The original brief described flat versioned model packages. The current API exposes request and response records directly, nests types owned by exactly one message, and places types shared by multiple messages in `model.type`.

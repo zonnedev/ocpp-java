@@ -158,6 +158,10 @@ Unknown data is not returned as `String`, `Object`, or `JsonNode`. Applications 
 
 `Ocpp16Iso15118DataTransferModule` is an opt-in implementation of the nine implemented operations described by the has-to-be OCPP 1.6 ISO 15118 Extension v1.3.
 
+The published v1.3 document misspells the `ExtendedTriggerMessage`
+`requestedMessage` value `SignV2GCertificate` as `SignV2GCertifcate`. This
+module exposes and accepts only the corrected `SignV2GCertificate` spelling.
+
 ```java
 modules.register(
   Ocpp16Iso15118DataTransferModule.create()

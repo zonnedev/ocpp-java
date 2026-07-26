@@ -775,13 +775,8 @@ public final class Ocpp16Iso15118DataTransferModule implements DataTransferModul
 
   public enum ExtendedTrigger {
     @JsonProperty("SignChargingStationCertificate")
-    SIGN_CHARGING_STATION_CERTIFICATE,
-    /**
-     * Preserves the missing “i” in “Certifcate” exactly as published in extension
-     * v1.3.
-     */
-    @JsonProperty("SignV2GCertifcate")
-    SIGN_V2G_CERTIFCATE
+    SIGN_CHARGING_STATION_CERTIFICATE, @JsonProperty("SignV2GCertificate")
+    SIGN_V2G_CERTIFICATE
   }
 
   public enum ExtendedTriggerStatus {

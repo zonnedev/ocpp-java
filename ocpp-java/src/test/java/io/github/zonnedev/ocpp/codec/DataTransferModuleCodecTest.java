@@ -14,6 +14,8 @@ import io.github.zonnedev.ocpp.extension.v16.iso15118.Ocpp16Iso15118DataTransfer
 import io.github.zonnedev.ocpp.extension.v16.iso15118.Ocpp16Iso15118DataTransferModule.AuthorizeResponse;
 import io.github.zonnedev.ocpp.extension.v16.iso15118.Ocpp16Iso15118DataTransferModule.AuthorizationStatus;
 import io.github.zonnedev.ocpp.extension.v16.iso15118.Ocpp16Iso15118DataTransferModule.CertificateAuthorizationStatus;
+import io.github.zonnedev.ocpp.extension.v16.iso15118.Ocpp16Iso15118DataTransferModule.ExtendedTrigger;
+import io.github.zonnedev.ocpp.extension.v16.iso15118.Ocpp16Iso15118DataTransferModule.ExtendedTriggerMessageRequest;
 import io.github.zonnedev.ocpp.extension.v16.iso15118.Ocpp16Iso15118DataTransferModule.HashAlgorithm;
 import io.github.zonnedev.ocpp.extension.v16.iso15118.Ocpp16Iso15118DataTransferModule.IdToken;
 import io.github.zonnedev.ocpp.extension.v16.iso15118.Ocpp16Iso15118DataTransferModule.IdTokenInfo;
@@ -73,6 +75,48 @@ class DataTransferModuleCodecTest {
         .idToken()
     ).isEqualTo("DE-EMAID-1");
     assertThat(request.iso15118CertificateHashData()).hasSize(1);
+  }
+
+  @Test
+  @DisplayName("The corrected SignV2GCertificate trigger round-trips")
+  void it_round_trips_the_corrected_sign_v2g_certificate_trigger() {
+    OcppMessageCodec codec = iso15118Codec();
+    var payload = io.github.zonnedev.ocpp.v16.model.DataTransferRequest.of(
+      ExtendedTriggerMessageRequest.of(ExtendedTrigger.SIGN_V2G_CERTIFICATE),
+      "ExtendedTriggerMessage",
+      Ocpp16Iso15118DataTransferModule.VENDOR_ID
+    );
+
+    String json = codec.encode(
+      OcppRequestMessage.of(
+        "trigger-1",
+        Ocpp16Actions.dataTransfer(Ocpp16Iso15118DataTransferModule.EXTENDED_TRIGGER_MESSAGE),
+        payload
+      )
+    );
+
+    assertThat(json).contains("\\\"requestedMessage\\\":\\\"SignV2GCertificate\\\"");
+
+    OcppRequestMessage<?> decoded = iso15118Codec().decodeRequest(
+      OcppVersion.OCPP_1_6_JSON,
+      json
+    );
+    var transfer = (io.github.zonnedev.ocpp.v16.model.DataTransferRequest<?>) decoded.payload();
+    ExtendedTriggerMessageRequest request = Ocpp16Iso15118DataTransferModule.EXTENDED_TRIGGER_MESSAGE
+      .requestType()
+      .cast(transfer.data());
+    assertThat(request.requestedMessage()).isEqualTo(ExtendedTrigger.SIGN_V2G_CERTIFICATE);
+  }
+
+  @Test
+  @DisplayName("The misspelled SignV2GCertifcate trigger is rejected")
+  void it_rejects_the_misspelled_sign_v2g_certificate_trigger() {
+    assertThatThrownBy(
+      () -> iso15118Codec().decodeRequest(
+        OcppVersion.OCPP_1_6_JSON,
+        "[2,\"trigger-typo\",\"DataTransfer\",{\"vendorId\":\"iso15118\",\"messageId\":\"ExtendedTriggerMessage\",\"data\":\"{\\\"requestedMessage\\\":\\\"SignV2GCertifcate\\\"}\"}]"
+      )
+    ).isInstanceOf(OcppDecodingException.class);
   }
 
   @Test

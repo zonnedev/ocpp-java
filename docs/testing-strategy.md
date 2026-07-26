@@ -52,7 +52,9 @@ git diff --check
 
 ## API compatibility
 
-The `apiCompatibilityCheck` task compares the current JAR with the released version declared by `apiBaselineVersion` in `gradle.properties`. It checks exported `io.github.zonnedev.ocpp` packages, excludes the non-exported `codec.internal` implementation package, and fails `check` when it finds a binary-incompatible public API change.
+The `apiCompatibilityCheck` task compares the current JAR with the released version declared by `apiBaselineVersion` in `gradle.properties`. It checks exported `io.github.zonnedev.ocpp` packages and excludes the non-exported `codec.internal` implementation package.
+
+Compatibility enforcement is temporarily detached from the `check` lifecycle while preparing `1.0.0-rc2`, which intentionally replaces the misspelled ISO 15118 extension API inherited from the `0.2.0` baseline. After `1.0.0-rc2` is published, update `apiBaselineVersion` to that immutable release and restore `check`'s dependency on `apiCompatibilityCheck`.
 
 The task writes text and HTML reports under `ocpp-java/build/reports/`. After publishing a release, update `apiBaselineVersion` to that immutable Maven Central version in a dedicated reviewed change. Never use a dynamic version such as `latest.release`, because the same commit must resolve the same compatibility baseline over time.
 
