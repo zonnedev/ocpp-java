@@ -2,6 +2,28 @@
 
 Immutable OCPP 1.6 JSON and OCPP 2.0.1 models and a strict Jackson codec for Java 25.
 
+## Installation
+
+The library requires Java 25 and is published to Maven Central.
+
+Gradle:
+
+```kotlin
+dependencies {
+  implementation("io.github.zonnedev:ocpp-java:1.0.0-rc.2")
+}
+```
+
+Maven:
+
+```xml
+<dependency>
+  <groupId>io.github.zonnedev</groupId>
+  <artifactId>ocpp-java</artifactId>
+  <version>1.0.0-rc.2</version>
+</dependency>
+```
+
 ## Documentation
 
 - [Getting started](docs/getting-started.md)
@@ -18,8 +40,8 @@ Immutable OCPP 1.6 JSON and OCPP 2.0.1 models and a strict Jackson codec for Jav
 
 Start with the [getting-started guide](docs/getting-started.md) to encode and decode your first OCPP message. The documentation uses the official terms `CALL`, `CALLRESULT`, and `CALLERROR` alongside the corresponding Java types.
 
-Development snapshots use the Maven coordinate `io.github.zonnedev:ocpp-java`. See
-[releasing](docs/releasing.md) for Maven Central publication requirements and the release workflow.
+Development snapshots use the same Maven coordinate. See [releasing](docs/releasing.md)
+for Maven Central publication requirements and the release workflow.
 
 Every push and pull request is compiled, formatted, statically checked, and tested on Java 25.
 Semantic-version tags publish signed artifacts to Maven Central and create a GitHub Release.

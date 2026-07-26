@@ -5,14 +5,22 @@
 - Java 25 or newer
 - The `io.github.zonnedev:ocpp-java` artifact and its runtime dependencies
 
-The project currently has version `0.1.0-SNAPSHOT`. If consuming it from the repository, publish it to a local Maven repository or add the Gradle project as a dependency in a composite or multi-project build.
-
 For a published release, add the library to a Gradle build with:
 
 ```kotlin
 dependencies {
-  implementation("io.github.zonnedev:ocpp-java:0.1.0")
+  implementation("io.github.zonnedev:ocpp-java:1.0.0-rc.2")
 }
+```
+
+Or with Maven:
+
+```xml
+<dependency>
+  <groupId>io.github.zonnedev</groupId>
+  <artifactId>ocpp-java</artifactId>
+  <version>1.0.0-rc.2</version>
+</dependency>
 ```
 
 ## Create the codec
