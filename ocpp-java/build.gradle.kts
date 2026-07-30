@@ -14,14 +14,14 @@ sourceSets.main {
 
 dependencies {
     api("org.jspecify:jspecify:1.0.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.19.2")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.2")
-    implementation("com.networknt:json-schema-validator:1.5.8")
+    api("com.fasterxml.jackson.core:jackson-databind:2.22.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1")
+    implementation("com.networknt:json-schema-validator:3.0.6")
 
-    testImplementation(platform("org.junit:junit-bom:5.13.4"))
+    testImplementation(platform("org.junit:junit-bom:6.1.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("org.assertj:assertj-core:3.27.3")
+    testImplementation("org.assertj:assertj-core:3.27.7")
 }
 
 val apiBaseline by configurations.creating {
