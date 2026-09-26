@@ -3,7 +3,6 @@ package io.github.zonnedev.ocpp.codec.internal;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.SpecVersion.VersionFlag;
 import com.networknt.schema.ValidationMessage;
 import io.github.zonnedev.ocpp.api.OcppVersion;
 import io.github.zonnedev.ocpp.codec.OcppDecodingException;
@@ -16,10 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /** Validates ordinary OCPP payloads against the checked-in official schemas. */
 public final class OfficialSchemaValidator {
   private static final JsonSchemaFactory V16_FACTORY = JsonSchemaFactory.getInstance(
-    VersionFlag.V4
+    com.networknt.schema.SpecVersion.VersionFlag.V4
   );
   private static final JsonSchemaFactory V201_FACTORY = JsonSchemaFactory.getInstance(
-    VersionFlag.V6
+    com.networknt.schema.SpecVersion.VersionFlag.V6
   );
 
   private final Map<SchemaKey, JsonSchema> schemas = new ConcurrentHashMap<>();
