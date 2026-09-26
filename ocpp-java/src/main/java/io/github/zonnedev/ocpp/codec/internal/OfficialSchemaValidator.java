@@ -1,13 +1,13 @@
 package io.github.zonnedev.ocpp.codec.internal;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.networknt.schema.OutputFormat;
+import com.networknt.schema.Schema;
 import com.networknt.schema.SchemaRegistry;
 import com.networknt.schema.SpecificationVersion;
-import com.networknt.schema.Schema;
 import io.github.zonnedev.ocpp.api.OcppVersion;
 import io.github.zonnedev.ocpp.codec.OcppDecodingException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,26 +28,15 @@ public final class OfficialSchemaValidator {
     Class<?> payloadType,
     JsonNode payload
   ) {
-    Objects.requireNonNull(
-      version,
-      "version"
-    );
-    Objects.requireNonNull(
-      payloadType,
-      "payloadType"
-    );
-    Objects.requireNonNull(
-      payload,
-      "payload"
-    );
+    Objects.requireNonNull(version, "version");
+    Objects.requireNonNull(payloadType, "payloadType");
+    Objects.requireNonNull(payload, "payload");
+
     var errors = schemas.computeIfAbsent(
-      new SchemaKey(
-        version,
-        payloadType
-      ),
+      new SchemaKey(version, payloadType),
       this::load
-    )
-      .validate(payload);
+    ).validate(payload, OutputFormat.DEFAULT);
+
     if (!errors.isEmpty()) {
       var first = errors.get(0);
       throw new OcppDecodingException(
@@ -58,10 +47,7 @@ public final class OfficialSchemaValidator {
   }
 
   private Schema load(SchemaKey key) {
-    String resource = resourceName(
-      key.version(),
-      key.payloadType()
-    );
+    String resource = resourceName(key.version(), key.payloadType());
     InputStream input = OfficialSchemaValidator.class.getResourceAsStream(resource);
     if (input == null) {
       throw new IllegalStateException("Missing bundled OCPP schema " + resource);
@@ -79,21 +65,15 @@ public final class OfficialSchemaValidator {
   ) {
     String name = payloadType.getSimpleName();
     if (version == OcppVersion.OCPP_1_6_JSON && name.endsWith("Request")) {
-      name = name.substring(
-        0,
-        name.length() - "Request".length()
-      );
+      name = name.substring(0, name.length() - "Request".length());
     }
     String directory = version == OcppVersion.OCPP_1_6_JSON ? "v16" : "v201";
-    return "/"
-      + directory
-      + "/"
-      + name
-      + ".json";
+    return "/" + directory + "/" + name + ".json";
   }
 
   private record SchemaKey(
-    OcppVersion version, Class<?> payloadType
+    OcppVersion version,
+    Class<?> payloadType
   ) {
   }
 }
